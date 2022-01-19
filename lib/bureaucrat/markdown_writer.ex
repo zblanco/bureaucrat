@@ -42,7 +42,8 @@ defmodule Bureaucrat.MarkdownWriter do
       puts(file, "  * [#{controller}](##{anchor})")
 
       Enum.each(actions, fn {action, _} ->
-        puts(file, "    * [#{action}](##{action})")
+        anchor = to_anchor(controller, action)
+        puts(file, "    * [#{action}](##{anchor})")
       end)
     end)
 
@@ -57,9 +58,9 @@ defmodule Bureaucrat.MarkdownWriter do
     end)
   end
 
-  defp write_action(action, _controller, records, file) do
-    # anchor = to_anchor(controller, action)
-    puts(file, "### #{action}")
+  defp write_action(action, controller, records, file) do
+    anchor = to_anchor(controller, action)
+    puts(file, "### #{anchor}")
     Enum.each(records, &write_example(&1, file))
   end
 
@@ -210,7 +211,7 @@ defmodule Bureaucrat.MarkdownWriter do
     end
   end
 
-  # defp to_anchor(controller, action), do: to_anchor("#{controller}.#{action}")
+  defp to_anchor(controller, action), do: to_anchor("#{controller}.#{action}")
 
   defp to_anchor(name) do
     name
